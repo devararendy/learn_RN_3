@@ -329,7 +329,7 @@ import React, { Component } from 'react';
 //import react in our code.
 
 import {
-  ScrollView,
+  Modal,
   Text,
   StyleSheet,
   View,
@@ -337,7 +337,8 @@ import {
   TextInput,
   ActivityIndicator,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 //import all the components we are going to use.
 import openURLInBrowser from 'react-native/Libraries/Core/Devtools/openURLInBrowser';
@@ -458,31 +459,41 @@ const transdata = [
     },
   ]
 
-  var dataTF = []
+  var dataTmp = []
 export default class App extends Component {
   constructor(props) {
     super(props);
     //setting default state
-    this.state = { isLoading: true, text: '' };
+    this.state = {
+      modalVisible: false,
+      isLoading: true,
+      text: '' ,
+      dataTF: [],
+    };
     this.arrayholder = [];
+  }
+   
+  setModalVisible = (visible) => {
+    this.setState({modalVisible: visible})
   }
   componentDidMount() {
     return fetch('https://nextar.flip.id/frontend-test')
       .then(response => response.json())
       .then(responseJson => {
-        dataTF = []
+        dataTmp = []
         Object.keys(responseJson).forEach((FT, index)=>{
-          dataTF[index] = responseJson[FT]
+          dataTmp[index] = responseJson[FT]
           console.log(responseJson[FT])
           console.log("=========================\r\n")
         })
         this.setState(
           {
             isLoading: false,
-            dataSource: dataTF
+            dataSource: dataTmp,
+            dataTF: dataTmp
           },
           function() {
-            this.arrayholder = dataTF
+            this.arrayholder = dataTmp
             
           }
         );
@@ -506,6 +517,30 @@ export default class App extends Component {
       text: text,
     });
   }
+  RadioButton(props) {
+    return (
+        <View style={[{
+          height: 24,
+          width: 24,
+          borderRadius: 12,
+          borderWidth: 2,
+          borderColor: '#000',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }, props.style]}>
+          {
+            props.selected ?
+              <View style={{
+                height: 12,
+                width: 12,
+                borderRadius: 6,
+                backgroundColor: '#000',
+              }}/>
+              : null
+          }
+        </View>
+    );
+  }
   ListViewItemSeparator = () => {
     //Item sparator view
     return (
@@ -518,7 +553,23 @@ export default class App extends Component {
       />
     );
   };
+  toggleListReverse = () => {
+    this.setState({
+      dataSource: this.state.dataTF.reverse()
+    })
+  }
+  toggleSortDate = () => {
+    this.setState({
+      dataSource: this.state.dataTF.sort((a,b) => a.created_at > b.created_at)
+    })
+  }
+  toggleSortName = () => {
+    this.setState({
+      dataSource: this.state.dataTF.sort((a,b) => a.beneficiary_name > b.beneficiary_name)
+    })
+  }
   render() {
+    const { modalVisible } = this.state;
     if (this.state.isLoading) {
       //Loading View while data is loading
       return (
@@ -528,62 +579,56 @@ export default class App extends Component {
       );
     }
     return (
+      
       //ListView to show with textinput used as search bar
-      <ScrollView contentInsetAdjustmentBehavior="automatic" style={{backgroundColor:'#f2f2f2'}}>
+      // <ScrollView contentInsetAdjustmentBehavior="automatic" style={{backgroundColor:'#f2f2f2'}}>
         <View style={styles.viewStyle}>
+           <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Hello World!</Text>
+              
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                onPress={() => {
+                  this.setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.textMdlStyle}>Hide Modal</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
+        <TouchableHighlight
+          style={styles.openButton}
+          onPress={() => {
+            this.toggleSortName();
+            // this.toggleSortDate();
+            // this.toggleListReverse();
+            // this.setModalVisible(true);
+          }}
+        >
+          <Text style={styles.textStyle}>Show Modal</Text>
+        </TouchableHighlight>
+        <View style={styles.textInputStyle}>
           <TextInput
             style={styles.textInputStyle}
             onChangeText={text => this.SearchFilterFunction(text)}
             value={this.state.text}
             underlineColorAndroid="transparent"
             placeholder= "Cari nama, bank, atau nominal"
+          />
+          <Text style={{color:'#f25d00', fontWeight:'bold'}} onPress={() => { this.setModalVisible(true)}}>URUTKAN {'\u2B07'}</Text>
+          <Text></Text>
+        </View>
           
-          /> 
-          {/* {dataTF.map((item)=>{
-          return(
-          <React.Fragment key={item.id}>
-            <View style={item.status=="SUCCESS"?
-              styles.separator:styles.separatorFalse}>
-              <TouchableOpacity
-                accessibilityRole={'button'}
-                onPress={() => {this.props.navigation.navigate('DetailTransaction', {
-                  id: item.id,
-                  amount: item.amount,
-                  unique_code: item.unique_code,
-                  status: item.status,
-                  sender_bank: item.sender_bank,
-                  account_number:item.account_number,
-                  beneficiary_name:item.beneficiary_name,
-                  beneficiary_bank:item.beneficiary_bank,
-                  remark:item.remark,
-                  created_at:item.created_at,
-                  completed_at:item.completed_at,
-                  fee:item.fee,
-                })} }
-                style={styles.linkContainer}>
-                  <View style={styles.itemLeft}>
-                    <View style={styles.linkContainer}>
-                      <Text style={{fontWeight:'bold'}}>{item.sender_bank.toUpperCase()}</Text>
-                      <Text style={{fontSize:19}}> {'\u21e8'} </Text>
-                      <Text style={{fontWeight:'bold'}}>{item.beneficiary_bank.toUpperCase()}</Text>
-                    </View>
-                    
-                    <Text style={styles.textStyle}>{item.status!="SUCCESS"?"- ":null}{item.beneficiary_name.toUpperCase()}</Text>
-                    <View style={styles.linkContainer}>
-                      <Text>Rp {item.amount}</Text>
-                      <Text style={{fontSize:19}}> {'\u2022'} </Text>
-                      <Text>{item.created_at}</Text>
-                    </View>
-                  </View>
-                
-                <Text style={item.status=="SUCCESS"?
-                    styles.textStatus:styles.textStatusFalse}>{item.status}</Text>
-              </TouchableOpacity>
-            </View>
-          </React.Fragment>
-            );
-          })} */}
-
           <FlatList
             data={this.state.dataSource}
             ItemSeparatorComponent={this.ListViewItemSeparator}
@@ -634,7 +679,7 @@ export default class App extends Component {
             keyExtractor={(item, index) => index.toString()}
           />
         </View>
-      </ScrollView>
+      // </ScrollView>
     );
   }
 }
@@ -663,10 +708,12 @@ const styles = StyleSheet.create({
     // padding: 5,
   },
   textInputStyle: {
-    height: 40,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     borderWidth: 1,
-    paddingLeft: 10,
-    marginBottom: 5,
+    // paddingLeft: 10,
     borderColor: '#fff',
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 5,
@@ -733,4 +780,42 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 7,
   },
   
+
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  textMdlStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });
