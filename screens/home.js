@@ -470,6 +470,7 @@ export default class App extends Component {
     return fetch('https://nextar.flip.id/frontend-test')
       .then(response => response.json())
       .then(responseJson => {
+        dataTF = []
         Object.keys(responseJson).forEach((FT, index)=>{
           dataTF[index] = responseJson[FT]
           console.log(responseJson[FT])
@@ -478,10 +479,10 @@ export default class App extends Component {
         this.setState(
           {
             isLoading: false,
-            // dataSource: dataTF
+            dataSource: dataTF
           },
           function() {
-            // this.arrayholder = dataTF
+            this.arrayholder = dataTF
             
           }
         );
@@ -494,7 +495,7 @@ export default class App extends Component {
     //passing the inserted text in textinput
     const newData = this.arrayholder.filter(function(item) {
       //applying filter for the inserted text in search bar
-      const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase();
+      const itemData = item.beneficiary_name ? item.beneficiary_name.toUpperCase() : ''.toUpperCase();
       const textData = text.toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
@@ -538,7 +539,7 @@ export default class App extends Component {
             placeholder= "Cari nama, bank, atau nominal"
           
           /> 
-          {dataTF.map((item)=>{
+          {/* {dataTF.map((item)=>{
           return(
           <React.Fragment key={item.id}>
             <View style={item.status=="SUCCESS"?
@@ -581,12 +582,52 @@ export default class App extends Component {
             </View>
           </React.Fragment>
             );
-          })}
+          })} */}
+
           <FlatList
-            data={dataTF}
+            data={this.state.dataSource}
             ItemSeparatorComponent={this.ListViewItemSeparator}
             renderItem={({ item }) => (
-              <Text style={styles.textStyle}>{item.beneficiary_name.toUpperCase()}</Text>
+              <React.Fragment key={item.id}>
+            <View style={item.status=="SUCCESS"?
+              styles.separator:styles.separatorFalse}>
+              <TouchableOpacity
+                accessibilityRole={'button'}
+                onPress={() => {this.props.navigation.navigate('DetailTransaction', {
+                  id: item.id,
+                  amount: item.amount,
+                  unique_code: item.unique_code,
+                  status: item.status,
+                  sender_bank: item.sender_bank,
+                  account_number:item.account_number,
+                  beneficiary_name:item.beneficiary_name,
+                  beneficiary_bank:item.beneficiary_bank,
+                  remark:item.remark,
+                  created_at:item.created_at,
+                  completed_at:item.completed_at,
+                  fee:item.fee,
+                })} }
+                style={styles.linkContainer}>
+                  <View style={styles.itemLeft}>
+                    <View style={styles.linkContainer}>
+                      <Text style={{fontWeight:'bold'}}>{item.sender_bank.toUpperCase()}</Text>
+                      <Text style={{fontSize:19}}> {'\u21e8'} </Text>
+                      <Text style={{fontWeight:'bold'}}>{item.beneficiary_bank.toUpperCase()}</Text>
+                    </View>
+                    
+                    <Text style={styles.textStyle}>{item.status!="SUCCESS"?"- ":null}{item.beneficiary_name.toUpperCase()}</Text>
+                    <View style={styles.linkContainer}>
+                      <Text>Rp {item.amount}</Text>
+                      <Text style={{fontSize:19}}> {'\u2022'} </Text>
+                      <Text>{item.created_at}</Text>
+                    </View>
+                  </View>
+                
+                <Text style={item.status=="SUCCESS"?
+                    styles.textStatus:styles.textStatusFalse}>{item.status}</Text>
+              </TouchableOpacity>
+            </View>
+          </React.Fragment>
             )}
             enableEmptySections={true}
             style={{ marginTop: 10 }}
