@@ -11,8 +11,8 @@ function App(){
     return(
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="Home" component={HomeScreen}/>
-                <Stack.Screen name="DetailTransaction" component={DetailTransaction}/>
+                <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Transaction List' }}/>
+                <Stack.Screen name="DetailTransaction" component={DetailTransaction}  options={{ title: 'Transaction Detail' }}/>
 
             </Stack.Navigator>
         </NavigationContainer>

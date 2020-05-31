@@ -541,7 +541,20 @@ export default class App extends Component {
               styles.separator:styles.separatorFalse}>
               <TouchableOpacity
                 accessibilityRole={'button'}
-                onPress={() => {this.props.navigation.navigate('DetailTransaction')} }
+                onPress={() => {this.props.navigation.navigate('DetailTransaction', {
+                  id: item.id,
+                  amount: item.amount,
+                  unique_code: item.unique_code,
+                  status: item.status,
+                  sender_bank: item.sender_bank,
+                  account_number:item.account_number,
+                  beneficiary_name:item.beneficiary_name,
+                  beneficiary_bank:item.beneficiary_bank,
+                  remark:item.remark,
+                  created_at:item.created_at,
+                  completed_at:item.completed_at,
+                  fee:item.fee,
+                })} }
                 style={styles.linkContainer}>
                   <View style={styles.itemLeft}>
                     <View style={styles.linkContainer}>
@@ -604,7 +617,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 20,
     padding: 16,
-    
   },
   textStyle: {
     // padding: 5,
