@@ -457,6 +457,8 @@ const transdata = [
       "fee":0
     },
   ]
+
+  var dataTF = []
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -464,20 +466,22 @@ export default class App extends Component {
     this.state = { isLoading: true, text: '' };
     this.arrayholder = [];
   }
-
   componentDidMount() {
     return fetch('https://nextar.flip.id/frontend-test')
       .then(response => response.json())
       .then(responseJson => {
+        Object.keys(responseJson).forEach((FT, index)=>{
+          dataTF[index] = responseJson[FT]
+          console.log(responseJson[FT])
+          console.log("=========================\r\n")
+        })
         this.setState(
           {
             isLoading: false,
-            //dataSource: responseJson.item
-            dataSource: transdata
+            // dataSource: dataTF
           },
           function() {
-            //this.arrayholder = responseJson.item;
-            this.arrayholder = transdata
+            // this.arrayholder = dataTF
             
           }
         );
@@ -534,7 +538,7 @@ export default class App extends Component {
             placeholder= "Cari nama, bank, atau nominal"
           
           /> 
-          {transdata.map((item)=>{
+          {dataTF.map((item)=>{
           return(
           <React.Fragment key={item.id}>
             <View style={item.status=="SUCCESS"?
@@ -579,10 +583,10 @@ export default class App extends Component {
             );
           })}
           <FlatList
-            data={this.state.dataSource}
+            data={dataTF}
             ItemSeparatorComponent={this.ListViewItemSeparator}
             renderItem={({ item }) => (
-              <Text style={styles.textStyle}>{item.beneficiary_name.toUpperCase}</Text>
+              <Text style={styles.textStyle}>{item.beneficiary_name.toUpperCase()}</Text>
             )}
             enableEmptySections={true}
             style={{ marginTop: 10 }}
@@ -608,14 +612,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingVertical: 1,
   },
-    container: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
   viewStyle: {
     justifyContent: 'center',
     flex: 1,
-    marginTop: 20,
+    marginTop: 10,
     padding: 16,
   },
   textStyle: {
