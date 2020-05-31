@@ -472,10 +472,12 @@ export default class App extends Component {
         this.setState(
           {
             isLoading: false,
-            dataSource: responseJson.item
+            //dataSource: responseJson.item
+            dataSource: transdata
           },
           function() {
-            this.arrayholder = responseJson.item;
+            //this.arrayholder = responseJson.item;
+            this.arrayholder = transdata
             
           }
         );
