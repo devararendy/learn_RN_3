@@ -3,15 +3,15 @@ import {
   View,
   Text,
 } from 'react-native';
-import Home from './screens/home'
-import Navigator from './routes/homeStack'
 
 export default class App extends Component{
   render(){
     return(
-      // <Home/>
-      <Navigator/>
-      
+      <View>
+          <Text>
+              Bismillah...
+          </Text>
+      </View>
     )
     
   }
