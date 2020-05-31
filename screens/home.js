@@ -6,324 +6,6 @@
 //  * @flow strict-local
 //  */
 
-// import React from 'react';
-// import {
-//   SafeAreaView,
-//   StyleSheet,
-//   ScrollView,
-//   View,
-//   Text,
-//   StatusBar,
-//   Button,
-//   TouchableOpacity,
-//   useState,
-//   useEffect
-// } from 'react-native';
-
-// import {
-//   Header,
-//   LearnMoreLinks,
-//   Colors,
-//   DebugInstructions,
-//   ReloadInstructions,
-// } from 'react-native/Libraries/NewAppScreen';
-
-// function onPressAlhamdulillah() {
-//   return <View><Text style={styles.sectionTitle}>Step Alhamdulillah Finally</Text></View>;
-// }
-// const links2 = [
-//   {
-//     id: 1,
-//     title: 'The Basics',
-//     link: 'https://facebook.github.io/react-native/docs/tutorial',
-//     description: 'Explains a Hello World for React Native.',
-//   },
-//   {
-//     id: 2,
-//     title: 'Style',
-//     link: 'https://facebook.github.io/react-native/docs/style',
-//     description:
-//       'Covers how to use the prop named style which controls the visuals.',
-//   },
-//   {
-//     id: 3,
-//     title: 'Layout',
-//     link: 'https://facebook.github.io/react-native/docs/flexbox',
-//     description: 'React Native uses flexbox for layout, learn how it works.',
-//   },
-//   {
-//     id: 4,
-//     title: 'Components',
-//     link: 'https://facebook.github.io/react-native/docs/components-and-apis',
-//     description: 'The full list of components and APIs inside React Native.',
-//   },
-//   {
-//     id: 5,
-//     title: 'Navigation',
-//     link: 'https://facebook.github.io/react-native/docs/navigation',
-//     description:
-//       'How to handle moving between screens inside your application.',
-//   },
-//   {
-//     id: 6,
-//     title: 'Networking',
-//     link: 'https://facebook.github.io/react-native/docs/network',
-//     description: 'How to use the Fetch API in React Native.',
-//   },
-//   {
-//     id: 7,
-//     title: 'Help',
-//     link: 'https://facebook.github.io/react-native/help',
-//     description:
-//       'Need more help? There are many other React Native developers who may have the answer.',
-//   },
-//   {
-//     id: 8,
-//     title: 'Follow us on Twitter',
-//     link: 'https://twitter.com/reactnative',
-//     description:
-//       'Stay in touch with the community, join in on Q&As and more by following React Native on Twitter.',
-//   },
-// ];
-
-// const App: () => React$Node = () => {
-//   const [isLoading, setLoading] = useState(true);
-//   const [data, setData] = useState([]);
-
-//   useEffect(() => {
-//     fetch('https://reactnative.dev/movies.json')
-//       .then((response) => response.json())
-//       .then((json) => setData(json.movies))
-//       .catch((error) => console.error(error))
-//       .finally(() => setLoading(false));
-//   }, []);
-//   return (
-//     <>
-//       <StatusBar barStyle="dark-content" />
-//       <SafeAreaView>
-//       {isLoading ? <ActivityIndicator/> : (
-
-//         <ScrollView
-//           contentInsetAdjustmentBehavior="automatic"
-//           style={styles.scrollView}>
-//           <Header />
-//           {global.HermesInternal == null ? null : (
-//             <View style={styles.engine}>
-//               <Text style={styles.footer}>Engine: Hermes</Text>
-//             </View>
-//           )}
-//           <View style={styles.body}>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Step Alhamdulillah </Text>
-//               <Text style={styles.sectionDescription}>
-//                 Edit <Text style={styles.highlight}>App.js</Text> to change this
-//                 screen and then come back to see your edits.
-//               </Text>
-//               <Button onPress={onPressAlhamdulillah} title="Alhamdulillah hghg" color="grey" ></Button>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>See Your Changes</Text>
-//               <Text style={styles.sectionDescription}>
-//                 <ReloadInstructions />
-//               </Text>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Debug</Text>
-//               <Text style={styles.sectionDescription}>
-//                 <DebugInstructions />
-//               </Text>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Learn More</Text>
-//               <Text style={styles.sectionDescription}>
-//                 Read the docs to discover what to do next:
-//               </Text>
-//             </View>
-//             <TransactionList></TransactionList>
-//             <LearnMoreLinks />
-//           </View>
-//         </ScrollView>
-//         )}
-//       </SafeAreaView>
-//     </>
-//   );
-// };
-
-// const TransactionList = (): Node => (
-//   <View style={styles2.container}>
-//     {links2.map(({id, title, link, description}) => {
-//       return (
-//         <React.Fragment key={id}>
-//           <View style={styles2.separator} />
-//           <TouchableOpacity
-//             accessibilityRole={'button'}
-//             onPress={() => openURLInBrowser(link)}
-//             style={styles2.linkContainer}>
-//             <Text style={styles2.link}>{title}</Text>
-//             <Text style={styles2.description}>{description}</Text>
-//           </TouchableOpacity>
-//         </React.Fragment>
-//       );
-//     })}
-//   </View>
-// );
-
-// const styles2 = StyleSheet.create({
-//   container: {
-//     marginTop: 32,
-//     paddingHorizontal: 24,
-//   },
-//   linkContainer: {
-//     flexWrap: 'wrap',
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     paddingVertical: 8,
-//   },
-//   link: {
-//     flex: 2,
-//     fontSize: 18,
-//     fontWeight: '400',
-//     color: Colors.primary,
-//   },
-//   description: {
-//     flex: 3,
-//     paddingVertical: 16,
-//     fontWeight: '400',
-//     fontSize: 18,
-//     color: Colors.dark,
-//   },
-//   separator: {
-//     backgroundColor: Colors.light,
-//     height: 1,
-//   },
-// });
-
-// const styles = StyleSheet.create({
-//   scrollView: {
-//     backgroundColor: Colors.lighter,
-//   },
-//   engine: {
-//     position: 'absolute',
-//     right: 0,
-//   },
-//   body: {
-//     backgroundColor: Colors.white,
-//   },
-//   sectionContainer: {
-//     marginTop: 32,
-//     paddingHorizontal: 24,
-//   },
-//   sectionTitle: {
-//     fontSize: 24,
-//     fontWeight: '600',
-//     color: Colors.black,
-//   },
-//   sectionDescription: {
-//     marginTop: 8,
-//     fontSize: 18,
-//     fontWeight: '400',
-//     color: Colors.dark,
-//   },
-//   highlight: {
-//     fontWeight: '700',
-//   },
-//   footer: {
-//     color: Colors.dark,
-//     fontSize: 12
-//     fontWeight: '600',
-//     padding: 4,
-//     paddingRight: 12,
-//     textAlign: 'right',
-//   },
-// });
-
-// export default App;
-
-// import React,  {Component}  from 'react';
-// import {
-//   AppRegistry,
-//   StyleSheet,
-//   Text,
-//   View,
-//   FlatList,
-
-// } from 'react-native';
-
-// const TransactionList = [
-//   {
-//     "FT25968":
-//     {
-//       "id":"FT25968",
-//       "amount":4264101,
-//       "unique_code":297,
-//       "status":"SUCCESS",
-//       "sender_bank":"bni",
-//       "account_number":"1740619476",
-//       "beneficiary_name":"Shanice Harwood",
-//       "beneficiary_bank":"btpn",
-//       "remark":"sample remark",
-//       "created_at":"2020-05-28 18:19:57",
-//       "completed_at":"2020-05-28 18:19:57",
-//       "fee":0
-//     }
-//   }
-// ];
-
-// export default class bismillah_flip extends Component {
-//   constructor(){
-//     super()
-//     this.state = {
-//       dataSource : []
-//     }
-//   }
-//   renderItem = () => {
-//     {console.log(item.account_number)}
-//     <View>
-//       <Text>Ya Allah</Text>
-//       <Text>{item.account_number}</Text>
-//     </View>
-//   }
-//   componentDidMount() {
-//     const url = 'https://nextar.flip.id/frontend-test'
-//     fetch(url)
-//     .then((response) => response.json())
-//     .then((responseJson) => {
-//       // console.log(JSON.stringify(responseJson))
-//       this.setState({
-//         dataSource: responseJson.FT25968
-//       })
-//     })
-//     .catch((error) => {
-//       console.log(error)
-//     })
-//   }
-//   render() {
-//     return (
-//       <View style={style.container}>
-//         <Text>Alhamdulillah ygyg</Text>
-//         <FlatList
-//           data={this.state.dataSource}
-//           // keyExtractor={({ id }, index) => id}
-//           renderItem={this.renderItem}
-//         ></FlatList>
-//       </View>
-//     )
-//   }
-// }
-
-// const style = StyleSheet.create({
-//     container:{
-//       flex:1,
-//       justifyContent:'center',
-//       alignItems:'center',
-//       backgroundColor:'#F5bbF5',
-
-//     }
-//   }
-// );
-
-
 //This is an example code to Add Search Bar Filter on Listview//
 import React, { Component } from 'react';
 //import react in our code.
@@ -341,124 +23,6 @@ import {
   TouchableHighlight,
 } from 'react-native';
 //import all the components we are going to use.
-import openURLInBrowser from 'react-native/Libraries/Core/Devtools/openURLInBrowser';
-
-const transdata = [
-  
-    {
-      "id":"FT25968",
-      "amount":4264101,
-      "unique_code":297,
-      "status":"SUCCESS",
-      "sender_bank":"bni",
-      "account_number":"1740619476",
-      "beneficiary_name":"Shanice Harwood",
-      "beneficiary_bank":"btpn",
-      "remark":"sample remark",
-      "created_at":"2020-05-28 18:19:57",
-      "completed_at":"2020-05-28 18:19:57",
-      "fee":0
-    },
-    {
-      "id":"FT84371",
-      "amount":3992153,
-      "unique_code":408,
-      "status":"SUCCESS",
-      "sender_bank":"bni",
-      "account_number":"3107079972",
-      "beneficiary_name":"Shanice Harwood",
-      "beneficiary_bank":"bri",
-      "remark":"sample remark",
-      "created_at":"2020-05-28 18:18:57",
-      "completed_at":"2020-05-28 18:19:57",
-      "fee":0
-    },
-    {
-      "id":"FT26995",
-      "amount":2533773,
-      "unique_code":852,
-      "status":"SUCCESS",
-      "sender_bank":"bni",
-      "account_number":"3482073465",
-      "beneficiary_name":"Selin Dawe",
-      "beneficiary_bank":"muamalat",
-      "remark":"sample remark",
-      "created_at":"2020-05-28 18:17:57",
-      "completed_at":"2020-05-28 18:19:57",
-      "fee":0
-    },
-    {
-      "id":"FT57291",
-      "amount":4981301,
-      "unique_code":392,
-      "status":"SUCCESS",
-      "sender_bank":"bni",
-      "account_number":"4033667796",
-      "beneficiary_name":"Sufyan Kramer",
-      "beneficiary_bank":"btpn",
-      "remark":"sample remark",
-      "created_at":"2020-05-27 15:19:57",
-      "completed_at":"2020-05-28 18:19:57",
-      "fee":0
-    },
-    {
-      "id":"FT90495",
-      "amount":3255093,
-      "unique_code":111,
-      "status":"SUCCESS",
-      "sender_bank":"bni",
-      "account_number":"9299133671",
-      "beneficiary_name":"Sammy-Jo Mccall",
-      "beneficiary_bank":"muamalat",
-      "remark":"sample remark",
-      "created_at":"2020-05-26 14:19:57",
-      "completed_at":"2020-05-28 18:19:57",
-      "fee":0
-    },
-    {
-      "id":"FT1703",
-      "amount":2110377,
-      "unique_code":398,
-      "status":"SUCCESS",
-      "sender_bank":"bni",
-      "account_number":"7718903324",
-      "beneficiary_name":"Shanice Harwood",
-      "beneficiary_bank":"bri",
-      "remark":"sample remark",
-      "created_at":"2020-05-25 13:19:57",
-      "completed_at":"2020-05-28 18:19:57",
-      "fee":0
-    },
-    {
-      "id":"FT1073",
-      "amount":1379246,
-      "unique_code":201,
-      "status":"SUCCESS",
-      "sender_bank":"bni",
-      "account_number":"5538652078",
-      "beneficiary_name":"Hal Matthams",
-      "beneficiary_bank":"bsm",
-      "remark":"sample remark",
-      "created_at":"2020-05-24 12:19:57",
-      "completed_at":"2020-05-28 18:19:57",
-      "fee":0
-    },
-    {
-      "id":"FT22827",
-      "amount":2093756,
-      "unique_code":329,
-      "status":"PENDING",
-      "sender_bank":"bni",
-      "account_number":"9770462273",
-      "beneficiary_name":"Jake Castillo",
-      "beneficiary_bank":"btpn",
-      "remark":"sample remark",
-      "created_at":"2020-05-23 11:19:57",
-      "completed_at":"2020-05-28 18:19:57",
-      "fee":0
-    },
-  ]
-
   var dataTmp = []
 export default class App extends Component {
   constructor(props) {
@@ -563,9 +127,19 @@ export default class App extends Component {
       dataSource: this.state.dataTF.sort((a,b) => a.created_at > b.created_at)
     })
   }
+  toggleSortDateDes = () => {
+    this.setState({
+      dataSource: this.state.dataTF.sort((a,b) => b.created_at > a.created_at)
+    })
+  }
   toggleSortName = () => {
     this.setState({
       dataSource: this.state.dataTF.sort((a,b) => a.beneficiary_name > b.beneficiary_name)
+    })
+  }
+  toggleSortNameDes = () => {
+    this.setState({
+      dataSource: this.state.dataTF.sort((a,b) => b.beneficiary_name > a.beneficiary_name)
     })
   }
   render() {
@@ -593,20 +167,29 @@ export default class App extends Component {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>Hello World!</Text>
+              {/* <tbody>
+                <tr>
+                  <td><input type="Radio" value="Nama A-Z" onChange={() => {this.toggleSortName()}}></input></td>
+                </tr>
+              </tbody> */}
+              <Text style={styles.modalText, {fontWeight:'bold', marginBottom:10}}>URUTKAN</Text>
+              <Text style={styles.modalText} onPress={() => {this.toggleSortName()}}>Nama A-Z</Text>
+              <Text style={styles.modalText} onPress={() => {this.toggleSortNameDes()}}>Nama Z-A</Text>
+              <Text style={styles.modalText} onPress={() => {this.toggleSortDate()}}>Tanggal Terbaru</Text>
+              <Text style={styles.modalText} onPress={() => {this.toggleSortDateDes()}}>Tanggal Terlama</Text>
               
               <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                style={{ ...styles.openButton, backgroundColor: "#2196F3", paddingHorizontal:50 }}
                 onPress={() => {
                   this.setModalVisible(!modalVisible);
                 }}
               >
-                <Text style={styles.textMdlStyle}>Hide Modal</Text>
+                <Text style={styles.textMdlStyle}>Tutup</Text>
               </TouchableHighlight>
             </View>
           </View>
         </Modal>
-        <TouchableHighlight
+        {/* <TouchableHighlight
           style={styles.openButton}
           onPress={() => {
             this.toggleSortName();
@@ -616,14 +199,14 @@ export default class App extends Component {
           }}
         >
           <Text style={styles.textStyle}>Show Modal</Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
         <View style={styles.textInputStyle}>
           <TextInput
             style={styles.textInputStyle}
             onChangeText={text => this.SearchFilterFunction(text)}
             value={this.state.text}
             underlineColorAndroid="transparent"
-            placeholder= "Cari nama, bank, atau nominal"
+            placeholder= "Cari nama, bank, atau nominal              "
           />
           <Text style={{color:'#f25d00', fontWeight:'bold'}} onPress={() => { this.setModalVisible(true)}}>URUTKAN {'\u2B07'}</Text>
           <Text></Text>
@@ -789,11 +372,12 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalView: {
+    // width:300,
     margin: 20,
     backgroundColor: "white",
-    borderRadius: 20,
+    borderRadius: 5,
     padding: 35,
-    alignItems: "center",
+    alignItems: "flex-start",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -816,6 +400,6 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "left"
   }
 });
