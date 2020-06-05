@@ -3,12 +3,14 @@ import {
   View,
   Text,
   StyleSheet,
-
+  Image,
 } from 'react-native';
+import {formatCurrency, formatDate} from '../diy_lib/common';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default class App extends Component{
   render(){
-    console.log(this.props)
+    // console.log(this.props)
     // const { navigation } = this.props;
     const id = this.props.route.params.id;
     const amount = this.props.route.params.amount;
@@ -23,7 +25,7 @@ export default class App extends Component{
     const completed_at = this.props.route.params.completed_at;
     const fee = this.props.route.params.fee;
     return(
-      <View style={styles.viewStyle}>
+      <ScrollView style={styles.viewStyle}>
           {/* <Text>
               Bismillah...
               {id}
@@ -42,9 +44,9 @@ export default class App extends Component{
             <View style={{paddingVertical:15, backgroundColor:'#fff'}}>
               <View style={styles.thrdContainer}>
                 <View style={{flex:1, flexDirection:'row'}}>
-                  <Text style={{fontWeight:'bold', fontSize:18}}>{sender_bank.toUpperCase()}</Text>
-                  <Text style={{fontSize:20}}> {'\u21e8'} </Text>
-                  <Text style={{fontWeight:'bold', fontSize:18}}>{beneficiary_bank.toUpperCase()}</Text>
+                  <Text style={{fontWeight:'bold', fontSize:18}}>{sender_bank.toUpperCase()} </Text>
+                  <Image source={require('../img/IconRightArrow.png')} style={{height:25, width:32}}></Image>
+                  <Text style={{fontWeight:'bold', fontSize:18}}> {beneficiary_bank.toUpperCase()}</Text>
                 </View>
               </View>
             </View>
@@ -55,7 +57,7 @@ export default class App extends Component{
               </View>
               <View style={styles.thrdContainer}>
                 <Text>{account_number}</Text>
-                <Text>Rp {amount}</Text>
+                <Text>Rp {formatCurrency(amount)}</Text>
               </View>
             </View>
             <View style={{paddingVertical:15, backgroundColor:'#fff'}}>
@@ -73,13 +75,13 @@ export default class App extends Component{
                 <Text style={{fontWeight:'bold'}}>WAKTU DIBUAT</Text>
               </View>
               <View style={styles.thrdContainer}>
-                <Text>{created_at}</Text>
+                <Text>{formatDate(created_at)}</Text>
               </View>
             </View>
           </View>
           
 
-      </View>
+      </ScrollView>
     )
     
   }

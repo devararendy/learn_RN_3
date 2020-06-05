@@ -21,9 +21,14 @@ import {
   Alert,
   TouchableOpacity,
   TouchableHighlight,
+  TouchableWithoutFeedback,
+  Image,
 } from 'react-native';
+import {formatCurrency, formatDate} from '../diy_lib/common';
+
 //import all the components we are going to use.
   var dataTmp = []
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +41,6 @@ export default class App extends Component {
     };
     this.arrayholder = [];
   }
-   
   setModalVisible = (visible) => {
     this.setState({modalVisible: visible})
   }
@@ -142,6 +146,7 @@ export default class App extends Component {
       dataSource: this.state.dataTF.sort((a,b) => b.beneficiary_name > a.beneficiary_name)
     })
   }
+  
   render() {
     const { modalVisible } = this.state;
     if (this.state.isLoading) {
@@ -157,38 +162,40 @@ export default class App extends Component {
       //ListView to show with textinput used as search bar
       // <ScrollView contentInsetAdjustmentBehavior="automatic" style={{backgroundColor:'#f2f2f2'}}>
         <View style={styles.viewStyle}>
-           <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              {/* <tbody>
-                <tr>
-                  <td><input type="Radio" value="Nama A-Z" onChange={() => {this.toggleSortName()}}></input></td>
-                </tr>
-              </tbody> */}
-              <Text style={styles.modalText, {fontWeight:'bold', marginBottom:10}}>URUTKAN</Text>
-              <Text style={styles.modalText} onPress={() => {this.toggleSortName()}}>Nama A-Z</Text>
-              <Text style={styles.modalText} onPress={() => {this.toggleSortNameDes()}}>Nama Z-A</Text>
-              <Text style={styles.modalText} onPress={() => {this.toggleSortDate()}}>Tanggal Terbaru</Text>
-              <Text style={styles.modalText} onPress={() => {this.toggleSortDateDes()}}>Tanggal Terlama</Text>
-              
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#2196F3", paddingHorizontal:50 }}
-                onPress={() => {
-                  this.setModalVisible(!modalVisible);
-                }}
-              >
-                <Text style={styles.textMdlStyle}>Tutup</Text>
-              </TouchableHighlight>
+          <TouchableWithoutFeedback>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                {/* <tbody>
+                  <tr>
+                    <td><input type="Radio" value="Nama A-Z" onChange={() => {this.toggleSortName()}}></input></td>
+                  </tr>
+                </tbody> */}
+                <Text style={styles.modalText, {fontWeight:'bold', marginBottom:10}}>URUTKAN</Text>
+                <Text style={styles.modalText} onPress={() => {this.toggleSortName()}}>Nama A-Z</Text>
+                <Text style={styles.modalText} onPress={() => {this.toggleSortNameDes()}}>Nama Z-A</Text>
+                <Text style={styles.modalText} onPress={() => {this.toggleSortDate()}}>Tanggal Terbaru</Text>
+                <Text style={styles.modalText} onPress={() => {this.toggleSortDateDes()}}>Tanggal Terlama</Text>
+                
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3", paddingHorizontal:50 }}
+                  onPress={() => {
+                    this.setModalVisible(!modalVisible);
+                  }}
+                >
+                  <Text style={styles.textMdlStyle}>Tutup</Text>
+                </TouchableHighlight>
+              </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
+          </TouchableWithoutFeedback>
+          
         {/* <TouchableHighlight
           style={styles.openButton}
           onPress={() => {
@@ -200,18 +207,22 @@ export default class App extends Component {
         >
           <Text style={styles.textStyle}>Show Modal</Text>
         </TouchableHighlight> */}
+        
         <View style={styles.textInputStyle}>
-          <TextInput
-            style={styles.textInputStyle}
+          <View style={{ flex:7,flexDirection:'row', alignItems:'center'}}>
+            <Image source={require('../img/IconSearch.png')} style={{height:30, width:30}}></Image>
+            <TextInput
+            style={styles.textInputStyle, {width: '100%'}}
             onChangeText={text => this.SearchFilterFunction(text)}
             value={this.state.text}
             underlineColorAndroid="transparent"
-            placeholder= "Cari nama, bank, atau nominal              "
+            placeholder= "Cari nama, bank, atau nominal"
           />
-          <Text style={{color:'#f25d00', fontWeight:'bold'}} onPress={() => { this.setModalVisible(true)}}>URUTKAN {'\u2B07'}</Text>
-          <Text></Text>
-        </View>
+          </View>
+          <Text style={{color:'#f25d00', fontWeight:'bold', flex:2, textAlign:'right'}} onPress={() => { this.setModalVisible(true)}}>URUTKAN {'\u2B07'}</Text>
           
+        </View>
+        
           <FlatList
             data={this.state.dataSource}
             ItemSeparatorComponent={this.ListViewItemSeparator}
@@ -238,16 +249,16 @@ export default class App extends Component {
                 style={styles.linkContainer}>
                   <View style={styles.itemLeft}>
                     <View style={styles.linkContainer}>
-                      <Text style={{fontWeight:'bold'}}>{item.sender_bank.toUpperCase()}</Text>
-                      <Text style={{fontSize:19}}> {'\u21e8'} </Text>
-                      <Text style={{fontWeight:'bold'}}>{item.beneficiary_bank.toUpperCase()}</Text>
+                      <Text style={{fontWeight:'bold'}}>{item.sender_bank.toUpperCase()} </Text>
+                      <Image source={require('../img/IconRightArrow.png')} style={{height:20, width:25}}></Image>
+                      <Text style={{fontWeight:'bold'}}> {item.beneficiary_bank.toUpperCase()}</Text>
                     </View>
                     
                     <Text style={styles.textStyle}>{item.status!="SUCCESS"?"- ":null}{item.beneficiary_name.toUpperCase()}</Text>
                     <View style={styles.linkContainer}>
-                      <Text>Rp {item.amount}</Text>
+                      <Text>Rp {formatCurrency(item.amount)}</Text>
                       <Text style={{fontSize:19}}> {'\u2022'} </Text>
-                      <Text>{item.created_at}</Text>
+                      <Text>{formatDate(item.created_at)}</Text>
                     </View>
                   </View>
                 
@@ -284,7 +295,7 @@ const styles = StyleSheet.create({
   viewStyle: {
     justifyContent: 'center',
     flex: 1,
-    marginTop: 10,
+    // marginTop: 10,
     padding: 16,
   },
   textStyle: {
@@ -296,7 +307,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
-    // paddingLeft: 10,
+    paddingLeft: 10,
     borderColor: '#fff',
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 5,
@@ -369,7 +380,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
+    backgroundColor:'rgba(0, 0, 0, 0.5)',
   },
   modalView: {
     // width:300,
