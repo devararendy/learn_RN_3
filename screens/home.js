@@ -25,10 +25,35 @@ import {
   Image,
 } from 'react-native';
 import {formatCurrency, formatDate} from '../diy_lib/common';
+import RadioButton from '../diy_lib/RadioButtton';
+import FlipColors from '../diy_lib/FlipColors';
 
 //import all the components we are going to use.
-  var dataTmp = []
+var dataTmp = [];
+var sortMethod='';
 
+const sortOptions = [
+  {
+		key: '0',
+    text: 'URUTKAN',
+	},
+  {
+		key: '1',
+		text: 'Nama A-Z',
+	},
+	{
+		key: '2',
+		text: 'Nama Z-A',
+	},
+	{
+		key: '3',
+		text: 'Tanggal Terbaru',
+	},
+	{
+		key: '4',
+		text: 'Tanggal Terlama',
+	},
+]
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -74,40 +99,22 @@ export default class App extends Component {
     //passing the inserted text in textinput
     const newData = this.arrayholder.filter(function(item) {
       //applying filter for the inserted text in search bar
-      const itemData = item.beneficiary_name ? item.beneficiary_name.toUpperCase() : ''.toUpperCase();
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
+       //applying filter for the inserted text in search bar
+       const itemName = item.beneficiary_name ? item.beneficiary_name.toUpperCase() : ''.toUpperCase();
+       const itemSenderBank = item.sender_bank ? item.sender_bank.toUpperCase() : ''.toUpperCase();
+       const itemBeneficiaryBank = item.beneficiary_bank ? item.beneficiary_bank.toUpperCase() : ''.toUpperCase();
+       const itemAmount = item.amount.toString();
+       
+       const textData = text.toUpperCase();
+       return (itemName.indexOf(textData) > -1) || (itemSenderBank.indexOf(textData) > -1) ||  (itemBeneficiaryBank.indexOf(textData) > -1) || (itemAmount.indexOf(textData) > -1);
+       
     });
     this.setState({
       //setting the filtered newData on datasource
       //After setting the data it will automatically re-render the view
-      dataSource: newData,
+      dataSource: this.sortData(newData),
       text: text,
     });
-  }
-  RadioButton(props) {
-    return (
-        <View style={[{
-          height: 24,
-          width: 24,
-          borderRadius: 12,
-          borderWidth: 2,
-          borderColor: '#000',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }, props.style]}>
-          {
-            props.selected ?
-              <View style={{
-                height: 12,
-                width: 12,
-                borderRadius: 6,
-                backgroundColor: '#000',
-              }}/>
-              : null
-          }
-        </View>
-    );
   }
   ListViewItemSeparator = () => {
     //Item sparator view
@@ -146,7 +153,31 @@ export default class App extends Component {
       dataSource: this.state.dataTF.sort((a,b) => b.beneficiary_name > a.beneficiary_name)
     })
   }
-  
+  sortData(inputData){
+    var tmpArr = inputData
+    switch(sortMethod)
+    {
+      case '0':
+
+      break;
+      case '1':
+        tmpArr = inputData.sort((a,b) => a.beneficiary_name > b.beneficiary_name)
+      break;
+      case '2':
+        tmpArr = inputData.sort((a,b) => b.beneficiary_name > a.beneficiary_name)
+      break;
+      case '3':
+        tmpArr = inputData.sort((a,b) => a.created_at > b.created_at)
+      break;
+      case '4':
+        tmpArr = inputData.sort((a,b) => b.created_at > a.created_at)
+      break;
+      default:
+        
+      break;
+    }
+    return tmpArr;
+  }
   render() {
     const { modalVisible } = this.state;
     if (this.state.isLoading) {
@@ -160,9 +191,7 @@ export default class App extends Component {
     return (
       
       //ListView to show with textinput used as search bar
-      // <ScrollView contentInsetAdjustmentBehavior="automatic" style={{backgroundColor:'#f2f2f2'}}>
         <View style={styles.viewStyle}>
-          <TouchableWithoutFeedback>
             <Modal
               animationType="slide"
               transparent={true}
@@ -170,47 +199,27 @@ export default class App extends Component {
               onRequestClose={() => {
                 Alert.alert("Modal has been closed.");
             }}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                {/* <tbody>
-                  <tr>
-                    <td><input type="Radio" value="Nama A-Z" onChange={() => {this.toggleSortName()}}></input></td>
-                  </tr>
-                </tbody> */}
-                <Text style={styles.modalText, {fontWeight:'bold', marginBottom:10}}>URUTKAN</Text>
-                <Text style={styles.modalText} onPress={() => {this.toggleSortName()}}>Nama A-Z</Text>
-                <Text style={styles.modalText} onPress={() => {this.toggleSortNameDes()}}>Nama Z-A</Text>
-                <Text style={styles.modalText} onPress={() => {this.toggleSortDate()}}>Tanggal Terbaru</Text>
-                <Text style={styles.modalText} onPress={() => {this.toggleSortDateDes()}}>Tanggal Terlama</Text>
-                
-                <TouchableHighlight
-                  style={{ ...styles.openButton, backgroundColor: "#2196F3", paddingHorizontal:50 }}
-                  onPress={() => {
-                    this.setModalVisible(!modalVisible);
-                  }}
-                >
-                  <Text style={styles.textMdlStyle}>Tutup</Text>
-                </TouchableHighlight>
-              </View>
-            </View>
+              <TouchableWithoutFeedback onPress={() => {
+                        this.setModalVisible(!modalVisible);
+                      }}>
+                <View style={styles.centeredView}>
+                  <TouchableWithoutFeedback>
+                    <View style={styles.modalView}>
+                      <RadioButton options={sortOptions} onPress={(keyRadio)=> {
+                        // console.log("===Radio Button : " + keyRadio);
+                        sortMethod = keyRadio;
+                        this.setState({dataSource:this.sortData(this.state.dataSource)})
+                      }}/>
+                    </View>
+                  </TouchableWithoutFeedback>
+                </View>
+              </TouchableWithoutFeedback>
+            
           </Modal>
-          </TouchableWithoutFeedback>
-          
-        {/* <TouchableHighlight
-          style={styles.openButton}
-          onPress={() => {
-            this.toggleSortName();
-            // this.toggleSortDate();
-            // this.toggleListReverse();
-            // this.setModalVisible(true);
-          }}
-        >
-          <Text style={styles.textStyle}>Show Modal</Text>
-        </TouchableHighlight> */}
         
         <View style={styles.textInputStyle}>
           <View style={{ flex:7,flexDirection:'row', alignItems:'center'}}>
-            <Image source={require('../img/IconSearch.png')} style={{height:30, width:30}}></Image>
+            <Image source={require('../img/IconSearch.png')} style={{height:30, width:30, opacity:0.2}}></Image>
             <TextInput
             style={styles.textInputStyle, {width: '100%'}}
             onChangeText={text => this.SearchFilterFunction(text)}
@@ -219,7 +228,7 @@ export default class App extends Component {
             placeholder= "Cari nama, bank, atau nominal"
           />
           </View>
-          <Text style={{color:'#f25d00', fontWeight:'bold', flex:2, textAlign:'right'}} onPress={() => { this.setModalVisible(true)}}>URUTKAN {'\u2B07'}</Text>
+          <Text style={{color:FlipColors.orange, fontWeight:'bold', flex:2, textAlign:'right'}} onPress={() => { this.setModalVisible(true)}}>URUTKAN {'\u2B07'}</Text>
           
         </View>
         
@@ -256,7 +265,7 @@ export default class App extends Component {
                     
                     <Text style={styles.textStyle}>{item.status!="SUCCESS"?"- ":null}{item.beneficiary_name.toUpperCase()}</Text>
                     <View style={styles.linkContainer}>
-                      <Text>Rp {formatCurrency(item.amount)}</Text>
+                      <Text>Rp{formatCurrency(item.amount)}</Text>
                       <Text style={{fontSize:19}}> {'\u2022'} </Text>
                       <Text>{formatDate(item.created_at)}</Text>
                     </View>
@@ -273,7 +282,6 @@ export default class App extends Component {
             keyExtractor={(item, index) => index.toString()}
           />
         </View>
-      // </ScrollView>
     );
   }
 }
@@ -322,7 +330,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight:15,
     marginBottom: 5,
-    borderLeftColor: '#00bf40',
+    borderLeftColor: FlipColors.green,
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
@@ -335,7 +343,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight:15,
     marginBottom: 5,
-    borderLeftColor: '#f25d00',
+    borderLeftColor: FlipColors.orange,
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
@@ -351,7 +359,7 @@ const styles = StyleSheet.create({
     // paddingRight:15,
     // marginBottom: 5,
     // borderLeftColor: '#f25d00',
-    backgroundColor: '#00bf40',
+    backgroundColor: FlipColors.green,
     borderTopLeftRadius: 7,
     borderTopRightRadius: 7,
     borderBottomRightRadius: 7,
@@ -366,7 +374,7 @@ const styles = StyleSheet.create({
     // paddingRight:15,
     // marginBottom: 5,
     borderWidth:3,
-    borderColor: '#f25d00',
+    borderColor: FlipColors.orange,
     backgroundColor: '#FFF',
     borderTopLeftRadius: 7,
     borderTopRightRadius: 7,
@@ -380,11 +388,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
     backgroundColor:'rgba(0, 0, 0, 0.5)',
   },
   modalView: {
-    // width:300,
+    width:'80%',
     margin: 20,
     backgroundColor: "white",
     borderRadius: 5,
@@ -398,12 +405,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5
-  },
-  openButton: {
-    backgroundColor: "#F194FF",
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
   },
   textMdlStyle: {
     color: "white",

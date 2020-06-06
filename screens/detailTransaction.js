@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import {formatCurrency, formatDate} from '../diy_lib/common';
 import { ScrollView } from 'react-native-gesture-handler';
+import FlipColors from '../diy_lib/FlipColors';
 
 export default class App extends Component{
   render(){
@@ -37,7 +38,7 @@ export default class App extends Component{
           
           <View style={styles.secndContainer}>
             <Text style={{fontWeight:'bold'}}>DETAIL TRANSAKSI</Text>
-            <Text style={{color:'#f25d00'}} onPress={() => this.props.navigation.goBack()}>Tutup</Text>
+            <Text style={{color:FlipColors.orange}} onPress={() => this.props.navigation.goBack()}>Tutup</Text>
           </View>
           
           <View style={styles.colContainer}>

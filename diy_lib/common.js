@@ -49,7 +49,7 @@ export function formatDate(rawDate){
         monthTxt = ""
         break;
     }
-    var newDate = subDate[2]+"-"+monthTxt+"-"+subDate[0]
-    console.log(newDate);
+    var newDate = parseInt(subDate[2])+" "+monthTxt+" "+subDate[0]
+    // console.log(newDate);
     return newDate;
 }
